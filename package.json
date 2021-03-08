@@ -4,6 +4,8 @@
   "description": "An application to automate adding cards to Anki",
   "main": "main.js",
   "scripts": {
+    "build:dev": "webpack",
+    "dev-server": "webpack serve --mode development",
     "electron-start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -20,11 +22,15 @@
   "devDependencies": {
     "@babel/cli": "^7.13.0",
     "@babel/core": "^7.13.8",
+    "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.13.8",
     "@babel/preset-env": "^7.13.9",
     "@babel/preset-react": "^7.12.13",
+    "babel-loader": "^8.2.2",
     "electron": "^12.0.0",
     "webpack": "^5.24.4",
-    "webpack-cli": "^4.5.0"
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
     "react": "^17.0.1",
