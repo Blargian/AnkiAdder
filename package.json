@@ -2,8 +2,9 @@
   "name": "ankiadder",
   "version": "1.0.0",
   "description": "An application to automate adding cards to Anki",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
+    "electron-start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
