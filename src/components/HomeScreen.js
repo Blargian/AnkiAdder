@@ -1,9 +1,10 @@
 import React from 'react';
+import SearchBar from './SearchBar';
 
 const HomeScreen = () => {
     return (
         <div className="Homescreen">
-            <h1>Test</h1>
+            <SearchBar/>
         </div>
     );
 }

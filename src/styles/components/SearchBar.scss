@@ -1,0 +1,22 @@
+.searchbar {
+
+    z-index: 1;
+    
+    .searchbar-input{
+        background-color:white;
+        border-radius: 0.5rem;
+        color: black;
+        width: 20rem;
+        height: 3rem;
+        margin-right: 2rem;
+        padding-left: 2rem;
+        line-height: 3rem;
+    }
+
+    .searchbar-button{
+        background-color:white;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 100%;
+    }
+}
