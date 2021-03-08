@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Blargian/AnkiAdder/issues"
   },
-  "homepage": "https://github.com/Blargian/AnkiAdder#readme"
+  "homepage": "https://github.com/Blargian/AnkiAdder#readme",
+  "devDependencies": {
+    "electron": "^12.0.0"
+  }
 }
