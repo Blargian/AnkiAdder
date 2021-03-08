@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
-import Test from './components/Test';
+import HomeScreen from './components/HomeScreen';
+import 'normalize.css/normalize.css';
 import './styles/styles.scss';
 
-ReactDOM.render(<Test/>,document.getElementById("root"));
+ReactDOM.render(<HomeScreen/>,document.getElementById("root"));

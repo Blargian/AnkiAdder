@@ -27,17 +27,28 @@ module.exports = () => {
                         {
                             loader: 'css-loader',
                             options: {
-                                sourceMap:true
+                              sourceMap: true
                             },
+                        },
+                        {
+                          loader: 'resolve-url-loader',
                         },
                         {
                             loader: 'sass-loader',
                             options: {
-                                sourceMap: true
+                              sourceMap: true,
                             }
-                        }
+                        },
                     ],
-                  }
+                  },
+                  {
+                    test: /\.(png|jpe?g|gif)$/i,
+                    use: [
+                      {
+                        loader: 'file-loader',
+                      },
+                    ],
+                  },
       ]
     },
     plugins: [
@@ -46,7 +57,10 @@ module.exports = () => {
     devServer: {
       contentBase: path.join(__dirname, 'public'),
       historyApiFallback: true,
-      publicPath: '/dist/'
+      publicPath: '/public',
+      lazy: false,
+      liveReload: true,
+      writeToDisk: true
     }
   }
 };
