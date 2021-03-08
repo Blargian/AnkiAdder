@@ -1,0 +1,19 @@
+{
+  "name": "ankiadder",
+  "version": "1.0.0",
+  "description": "An application to automate adding cards to Anki",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Blargian/AnkiAdder.git"
+  },
+  "author": "Shaun Struwig",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Blargian/AnkiAdder/issues"
+  },
+  "homepage": "https://github.com/Blargian/AnkiAdder#readme"
+}
