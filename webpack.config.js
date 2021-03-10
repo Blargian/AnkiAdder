@@ -61,6 +61,6 @@ module.exports = () => {
       lazy: false,
       liveReload: true,
       writeToDisk: true
-    }
+    },
   }
 };
