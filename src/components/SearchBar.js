@@ -23,7 +23,8 @@ const SearchBar = (props) => {
             <input 
                 onChange={onValueChangeHandler}  
                 className="searchbar-input" type="text" 
-                placeholder="Ваш поиск"></input>
+                placeholder="Ваш поиск">
+            </input>
             <button
                 onClick={onSubmitHandler} 
                 className="searchbar-button"

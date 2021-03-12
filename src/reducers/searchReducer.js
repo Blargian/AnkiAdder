@@ -1,16 +1,17 @@
+
 const initialState = {
     searchTerm: ''
-}
+};
 
-const searchReducer = (state = initialState,action) => {
+export const searchReducer = (state = initialState,action) => {
     switch(action.type){
         case 'ADD_SEARCHTERM' : {
-            return action.payload.searchWord;
+            return ({
+                searchTerm: action.payload.searchWord
+            });
         }
         default : {
             return state;
         }
     }
 }
-
-export default searchReducer;
