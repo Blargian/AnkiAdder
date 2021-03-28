@@ -1,11 +1,12 @@
 .searchbar {
 
+    position: relative;
     background-color: rgba(255, 255, 255, 0.5);
     z-index: 1;
     padding: 2rem;
     border-radius: 2rem;
     
-    .searchbar-input{
+    &-input{
         box-sizing: border-box;
         padding-left: 10px;
         background-color:white;
@@ -19,7 +20,7 @@
         outline: none;
     }
 
-    .searchbar-button{
+    &-button{
         background-color:white;
         width: 3rem;
         height: 3rem;
@@ -27,5 +28,33 @@
         outline: none;
 
         &:active {}
+    }
+
+    &__autocomplete{
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0.5);
+        margin: 0.5rem;
+        visibility: visible;
+
+        ul{
+            width: 19rem;
+            margin: 0;
+            padding: 0.5rem;
+            list-style: none;
+
+            li{
+                cursor:pointer;
+                margin: 0;
+                padding: 0;
+                color: white;
+            }
+        }
+
+        &--hide{
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.5);
+            margin: 0.5rem;
+            visibility: hidden;
+        }
     }
 }
