@@ -7,6 +7,6 @@ module.exports = {
 }
 
 async function fetchWord (word) {
-    return await db.select('id','bare','accented','type','audio').from('words').where('bare','like',`${word}%`)
+    return await db.select('id','bare','accented','type','audio').from('words').where('bare','like',`${word}%`).limit(10)
 }
 

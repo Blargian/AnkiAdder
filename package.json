@@ -44,6 +44,8 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "@fortawesome/react-fontawesome": "^0.1.14",
+    "axios": "^0.21.1",
+    "babel-polyfill": "^6.26.0",
     "jest": "^26.6.3",
     "knex": "^0.95.4",
     "normalize.css": "^8.0.1",
