@@ -7,8 +7,9 @@ import axios from 'axios';
 
 const SearchBar = (props) => {
 
-    const [searchTerm, setSearchTerm] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
     const [searchResults,setSearchResults] = useState([]);
+    const [visible, setVisibility] = useState('searchbar__autocomplete');
 
     const onSubmitHandler = (e) => {
         e.preventDefault();
@@ -17,9 +18,19 @@ const SearchBar = (props) => {
     }
 
     const onValueChangeHandler = (e) => {
+        setVisibility('searchbar__autocomplete');
         setSearchTerm(e.target.value);
     }
 
+    const selectSuggestHandler = (id) => {
+        const selected = searchResults.filter((result) => {
+            return result.id === id;
+        })
+        setVisibility('searchbar__autocomplete--hide');
+        setSearchTerm(selected[0].bare);
+    }
+
+    //Makes a request to the api endpoint on search change
     useEffect(async () => {
         if(searchTerm){
             const results = await axios(
@@ -34,16 +45,17 @@ const SearchBar = (props) => {
     return (
         <form className="searchbar">
             <input 
+                value={searchTerm}
                 onChange={onValueChangeHandler}  
                 className="searchbar-input" type="text" 
                 placeholder="Ваш поиск">
             </input>
-            <div className="searchbar__autocomplete">
+            <div className={visible}>
             {
                 searchResults.length>0 && <ul>
                   {
                       searchResults.map((result)=>{
-                          return <li key={result.id}>{result.accented}</li>
+                          return <li onClick={()=>selectSuggestHandler(result.id)} key={result.id}>{result.accented}</li>
                       })
                   }
                 </ul>
