@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { connect } from "react-redux";
 import {searchTermAction} from '../actions/searchActions';
+import { motion } from "framer-motion"
 import axios from 'axios';
 
 const SearchBar = (props) => {
@@ -30,7 +31,6 @@ const SearchBar = (props) => {
         setSearchTerm(selected[0].bare);
     }
 
-    //Makes a request to the api endpoint on search change
     useEffect(async () => {
         if(searchTerm){
             const results = await axios(
@@ -50,12 +50,20 @@ const SearchBar = (props) => {
                 className="searchbar-input" type="text" 
                 placeholder="Ваш поиск">
             </input>
-            <div className={visible}>
+            <div 
+                className={visible}
+            >
             {
                 searchResults.length>0 && <ul>
                   {
                       searchResults.map((result)=>{
-                          return <li onClick={()=>selectSuggestHandler(result.id)} key={result.id}>{result.accented}</li>
+                          return <motion.li 
+                                    onClick={()=>selectSuggestHandler(result.id)} 
+                                    key={result.id}
+                                    whileHover={{ translateX: 5 }}
+                                >
+                                    {result.accented}
+                                </motion.li>
                       })
                   }
                 </ul>
