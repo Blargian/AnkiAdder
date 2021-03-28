@@ -1,3 +1,4 @@
 /node_modules
 /public/dist
 /russian-dictionary
+/database/openrussian.db

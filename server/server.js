@@ -14,7 +14,6 @@ app.get('/', (req, res) => {
 app.get('/api/:word',(req,res) => {
   console.log(req.params.word)
   helpers.fetchWord(req.params.word).then((result) => {
-    console.log(result)
     res.status(200).json(result);
   }).catch((error)=>{
     console.log(error)
