@@ -5,9 +5,11 @@ import { connect } from "react-redux";
 import {searchTermAction} from '../actions/searchActions';
 import { motion } from "framer-motion"
 import axios from 'axios';
+import { useHistory } from "react-router-dom";
 
 const SearchBar = (props) => {
 
+    let history = useHistory();
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults,setSearchResults] = useState([]);
     const [visible, setVisibility] = useState('searchbar__autocomplete');
@@ -16,6 +18,10 @@ const SearchBar = (props) => {
         e.preventDefault();
         props.addSearchTerm(searchTerm);
         setSearchTerm('');
+
+        //Could implement the logic on what to do eg) verb vs noun here
+        //then make the appropriate pushes
+        history.push("/add");
     }
 
     const onValueChangeHandler = (e) => {
