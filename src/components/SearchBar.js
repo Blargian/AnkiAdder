@@ -18,6 +18,9 @@ const SearchBar = (props) => {
         e.preventDefault();
         props.addSearchTerm(searchTerm);
         setSearchTerm('');
+
+        //Could implement the logic on what to do eg) verb vs noun here
+        //then make the appropriate pushes
         history.push("/add");
     }
 
