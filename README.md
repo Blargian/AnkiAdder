@@ -13,3 +13,6 @@ Added an autosuggest dropdown from the search bar which displays the top 10 clos
 29/03/2021
 
 Added React-Router and set it up so that a new 'Selector' component is rendered once the search is submitted. (place holder text on this component for now)
+
+02/04/2021 
+
