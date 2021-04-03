@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import {addImageAction} from '../actions/addActions';
 
-const ImageGrid = ({word}) => {
+const ImageGrid = ({word,addImageAction}) => {
 
     const [images, setImages] = useState([])
     //on component mount fetch the images
@@ -14,6 +15,11 @@ const ImageGrid = ({word}) => {
         console.log(results)
     },[])
 
+    const selectedImage = (imageURL) => {
+        console.log(imageURL);
+        addImageAction(imageURL);
+    }
+
     return (
         <div className="image-grid">
             {images.map((image)=>{
@@ -22,6 +28,7 @@ const ImageGrid = ({word}) => {
                 return <div 
                     className="image-grid__image" 
                     key={image.id} 
+                    onClick={()=>selectedImage(image.webformatURL)}
                     style={{
                         content: '',
                         backgroundImage: `url(${image.webformatURL})`,
@@ -40,4 +47,8 @@ const mapStateToProps = (state) => {
     return {word}
 }
 
-export default connect(mapStateToProps,null)(ImageGrid); 
+const mapDispatchToProps = (dispatch) => ({
+    addImageAction: (imageURL) => dispatch(addImageAction(imageURL))
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(ImageGrid); 
