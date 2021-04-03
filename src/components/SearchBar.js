@@ -65,7 +65,7 @@ const SearchBar = (props) => {
                       searchResults.map((result)=>{
                           return <motion.li 
                                     onClick={()=>selectSuggestHandler(result.id)} 
-                                    key={result.id}
+                                    key={result.bare}
                                     whileHover={{ translateX: 5 }}
                                 >
                                     {result.accented}

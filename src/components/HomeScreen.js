@@ -11,15 +11,15 @@ const HomeScreen = (props) => {
 
     return (
         <Router>
-            <Switch>
-                <div className="Homescreen">
-                    <Route exact path="/">
+            <Switch >
+                <Route exact path="/">
+                    <div className="Homescreen">
                         <SearchBar/>
-                    </Route>
-                    <Route exact path="/add">
-                        <Selector/>
-                    </Route>
-                </div>
+                    </div>
+                </Route>
+                <Route exact path="/add">
+                    <Selector/>
+                </Route>
             </Switch>
         </Router>
     );
