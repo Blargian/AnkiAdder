@@ -6,6 +6,14 @@
     grid-gap: 1rem;
 
     &__image{
+        &--selected-false{
+        }
+    
+        &--selected-true{
+            border: 3px solid #00FF00;
+        }
     }
+
+
 
 }
