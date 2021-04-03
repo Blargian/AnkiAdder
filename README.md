@@ -14,5 +14,6 @@ Added an autosuggest dropdown from the search bar which displays the top 10 clos
 
 Added React-Router and set it up so that a new 'Selector' component is rendered once the search is submitted. (place holder text on this component for now)
 
-02/04/2021 
+03/04/2021 
 
+Added an image grid and image selection functionality. An API call is made to Pixabay which fetches images for the search term. When the user clicks an image the image url is written to the redux store and a visual indicator added to show which item is selected.  
