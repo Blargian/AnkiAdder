@@ -17,3 +17,7 @@ Added React-Router and set it up so that a new 'Selector' component is rendered 
 03/04/2021 
 
 Added an image grid and image selection functionality. An API call is made to Pixabay which fetches images for the search term. When the user clicks an image the image url is written to the redux store and a visual indicator added to show which item is selected.  
+
+04/04/2021 
+
+Refactored the search bar redux code to pass more information for the search to the store (added audio, accented, type and id), added a dbHelper and endpoint for fetching the translation. Added pronounciation play support (for words where the pronounciation link exists).
