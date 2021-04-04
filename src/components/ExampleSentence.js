@@ -2,7 +2,7 @@ import React from 'react';
 
 const ExampleSentence = () => {
     return (
-        <div>
+        <div className="example-sentence">
             <form
                 onSubmit={()=>{}}
             >
