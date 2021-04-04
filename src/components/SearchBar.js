@@ -7,16 +7,29 @@ import { motion } from "framer-motion"
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
 
-const SearchBar = (props) => {
+const SearchBar = ({addSearchTerm}) => {
 
     let history = useHistory();
+
     const [searchTerm, setSearchTerm] = useState('');
+    const [accented, setAccented] = useState('');
+    const [type, setType] = useState('');
+    const [audio, setAudio] = useState('');
+    const [id, setID] = useState(null);
+
     const [searchResults,setSearchResults] = useState([]);
     const [visible, setVisibility] = useState('searchbar__autocomplete');
 
     const onSubmitHandler = (e) => {
         e.preventDefault();
-        props.addSearchTerm(searchTerm);
+        const submitObject = {
+            id,
+            bare: searchTerm,
+            accented,
+            type,
+            audio
+        }
+        addSearchTerm(submitObject);
         setSearchTerm('');
 
         //Could implement the logic on what to do eg) verb vs noun here
@@ -34,7 +47,13 @@ const SearchBar = (props) => {
             return result.id === id;
         })
         setVisibility('searchbar__autocomplete--hide');
+
+        //Set the states
         setSearchTerm(selected[0].bare);
+        setAccented(selected[0].accented);
+        setType(selected[0].type);
+        setAudio(selected[0].audio);
+        setID(selected[0].id);
     }
 
     useEffect(async () => {

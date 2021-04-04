@@ -1,7 +1,11 @@
 
-export const searchTermAction  = (searchWord) => ({
+export const searchTermAction  = ({id=null,bare,accented,type,audio}) => ({
     type: 'ADD_SEARCHTERM',
     payload: {
-        searchWord
+        id, 
+        bare,
+        accented,
+        type,
+        audio
     }
 });

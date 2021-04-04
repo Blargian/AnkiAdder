@@ -53,7 +53,7 @@ const ImageGrid = ({word,addImageAction}) => {
 }
 
 const mapStateToProps = (state) => {
-    const word = state.search.searchTerm;
+    const word = state.search.bare;
     return {word}
 }
 
