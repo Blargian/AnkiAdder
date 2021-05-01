@@ -31,6 +31,23 @@ app.get('/api/translate/:id',(req,res)=>{
   })
 })
 
+app.get('/add',interfaceAnki);
+//Function which passes the JSON to anki itself through python
+function interfaceAnki(req,res) {
+
+  console.log('Reached interfaceAnki');
+  var spawn = require("child_process").spawn;
+
+  var process = spawn('python',["-u",path.join(__dirname, "anki_service.py"),
+                                req.query.firstname,
+                                req.query.lastname]);
+
+  process.stdout.on('data', function(data) {
+    res.send(data.toString());
+  });
+
+}
+
 app.listen(port, () => {
     console.log('Server is up!');
 });

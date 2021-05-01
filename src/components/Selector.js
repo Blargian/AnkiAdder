@@ -48,7 +48,6 @@ const Selector = ({word,accented,type,id,audio}) => {
             </div>
             <ImageGrid/>
             <ExampleSentence/>
-            <button>Add to Anki</button>
         </div>
     )
 }

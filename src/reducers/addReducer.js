@@ -4,6 +4,7 @@ const initialState = {
     accented: '',
     pronounciationURL: '',
     exampleSentence: '',
+    extraInfo: '',
 };
 
 export const addReducer = (state = initialState,action) => {
@@ -13,6 +14,18 @@ export const addReducer = (state = initialState,action) => {
                 ...state,
                 imageURL: action.payload
             });
+        }
+        case 'ADD_EXAMPLE' : {
+            return({
+                ...state,
+                exampleSentence: action.payload
+            })
+        } 
+        case 'ADD_EXTRA' : {
+            return({
+                ...state,
+                extraInfo: action.payload
+            })
         }
         default : {
             return state;

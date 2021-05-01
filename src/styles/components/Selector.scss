@@ -16,6 +16,15 @@
         }
     }
 
+    .add-button{
+        cursor: pointer;
+        background-color: none;
+        margin-top: $small;
+        padding:0.5em 3em;
+        border:0.16em solid #000000;
+        text-decoration:none;
+    }
+
 }
 
 .selector__audioIcon{
