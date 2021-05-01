@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -16,19 +16,27 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-const ExampleSentence = ({addExampleSentence,addExtraInfo}) => {
+const ExampleSentence = ({addObject,addExampleSentence,addExtraInfo}) => {
 
     const [exampleSentence, setExample] = useState('');
     const [extraInfo, setExtra] = useState('');
+    const [add,setAdd] = useState(false);
     const classes = useStyles();
 
     const submitHandler = (event) => {
         event.preventDefault();
         addExampleSentence(exampleSentence);
         addExtraInfo(extraInfo);
-        console.log(addObject);
-        utility.reduxToJSON(addObject);
+        setAdd(true);
     }
+
+    useEffect(()=>{
+        if(add){
+            setAdd(false);
+            console.log(addObject);
+            utility.reduxToJSON(addObject);
+        }
+    },[addObject])
 
     return (
         <div className="example-sentence">
