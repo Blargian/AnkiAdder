@@ -1,7 +1,11 @@
 import '../../reducers/addReducer';
-import {addImageAction} from '../../actions/addActions';
-import {addExampleSentenceAction} from '../../actions/addActions';
-import {addExtraInfoAction} from '../../actions/addActions';
+import {
+    addImageAction,
+    addExtraInfoAction,
+    addExampleSentenceAction,
+    addPronounciationAction,
+    addAccentedAction
+} from '../../actions/addActions';
 import { addReducer } from '../../reducers/addReducer';
 
 describe('Add Reducer',()=>{
@@ -69,6 +73,38 @@ describe('Add Reducer',()=>{
         expect(addReducer(currentState,addExtraInfoAction(mockExtraInfo))).toEqual({
             ...currentState,
             extraInfo: mockExtraInfo,
+        });
+    });
+
+    it('Should correctly return the state with only the pronounciationURL modified',() => {
+        const mockPronUrl = 'https://api.openrussian.org/read/ru/соба́ка';
+        const currentState = {
+            imageURL: 'https://pixabay.com/get/g9f93b282920.jpg',
+            extraInfo: 'Female',
+            accented: 'соба́ка',
+            pronounciationURL: '',
+            exampleSentence: 'Мы вместе до́лжны забо́титься о соба́ке',
+        }
+
+        expect(addReducer(currentState,addPronounciationAction('соба́ка'))).toEqual({
+            ...currentState,
+            pronounciationURL: mockPronUrl
+        });
+    });
+
+    it('Should correctly return the state only modifying the accented property',()=>{
+        const mockAccented = 'соба́ка';
+        const currentState = {
+            imageURL: 'https://pixabay.com/get/g9f93b282920.jpg',
+            extraInfo: 'Female',
+            accented: '',
+            pronounciationURL: 'https://api.openrussian.org/read/ru/соба́ка',
+            exampleSentence: 'Мы вместе до́лжны забо́титься о соба́ке',
+        }
+
+        expect(addReducer(currentState,addAccentedAction(mockAccented))).toEqual({
+            ...currentState,
+            accented: mockAccented,
         });
     });
 });

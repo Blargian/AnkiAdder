@@ -3,11 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { connect } from "react-redux";
 import {searchTermAction} from '../actions/searchActions';
+import {addPronounciationAction, addAccentedAction} from '../actions/addActions';
 import { motion } from "framer-motion"
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
 
-const SearchBar = ({addSearchTerm}) => {
+const SearchBar = ({addSearchTerm, addAccented, addPronounciation}) => {
 
     let history = useHistory();
 
@@ -30,6 +31,8 @@ const SearchBar = ({addSearchTerm}) => {
             audio
         }
         addSearchTerm(submitObject);
+        addAccented(accented);
+        addPronounciation(accented);
         setSearchTerm('');
 
         //Could implement the logic on what to do eg) verb vs noun here
@@ -105,7 +108,9 @@ const SearchBar = ({addSearchTerm}) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    addSearchTerm: (search) => dispatch(searchTermAction(search))
+    addSearchTerm: (search) => dispatch(searchTermAction(search)),
+    addAccented: (word) => dispatch(addAccentedAction(word)),
+    addPronounciation: (url) => dispatch(addPronounciationAction(url)),
 })
 
 export default connect(null,mapDispatchToProps)(SearchBar);

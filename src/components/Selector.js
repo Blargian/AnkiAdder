@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import ImageGrid from '../components/ImageGrid';
 import ExampleSentence from '../components/ExampleSentence';
 
-const Selector = ({word,accented,type,id,audio}) => {
+const Selector = ({word,accented,type,id}) => {
 
     const [translation, setTranslation] = useState('');
 
@@ -21,7 +21,6 @@ const Selector = ({word,accented,type,id,audio}) => {
     }, [])
 
     const playAudioHandler = () => {
-        console.log('Reached play audio handler');
         const audioElement = document.getElementsByClassName("play-audio")[0];
         audioElement.play();
     }
@@ -36,7 +35,7 @@ const Selector = ({word,accented,type,id,audio}) => {
                 </div>
                 <div>
                     <audio className="play-audio">
-                        <source src={`${audio}`}></source>
+                        <source src={`https://api.openrussian.org/read/ru/${accented}`}></source>
                     </audio>
                     <FontAwesomeIcon
                         className="selector__audioIcon" 
@@ -57,8 +56,7 @@ const mapStateToProps = (state) => {
     const accented = state.search.accented;
     const type = state.search.type;
     const id = state.search.id;
-    const audio = state.search.audio;
-    return {word,accented,type,id,audio}
+    return {word,accented,type,id}
 };
 
 export default connect(mapStateToProps, null)(Selector);

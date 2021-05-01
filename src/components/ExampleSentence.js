@@ -3,9 +3,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
-import { connect } from 'react-redux';
+import { connect,useSelector } from 'react-redux';
+import Utility from '../utilities/utility';
 import {addExampleSentenceAction,addExtraInfoAction} from '../actions/addActions';
 
+const utility = new Utility();
 const useStyles = makeStyles((theme) => ({
     root: {
       '& > *': {
@@ -24,7 +26,8 @@ const ExampleSentence = ({addExampleSentence,addExtraInfo}) => {
         event.preventDefault();
         addExampleSentence(exampleSentence);
         addExtraInfo(extraInfo);
-        console.log('Added info');
+        console.log(addObject);
+        utility.reduxToJSON(addObject);
     }
 
     return (
@@ -63,6 +66,18 @@ const ExampleSentence = ({addExampleSentence,addExtraInfo}) => {
 const mapDispatchToProps = (dispatch) => ({
     addExampleSentence: (exampleSentence) => dispatch(addExampleSentenceAction(exampleSentence)),
     addExtraInfo: (extraInfo) => dispatch(addExtraInfoAction(extraInfo))
-})
+});
 
-export default connect(null,mapDispatchToProps)(ExampleSentence);
+const mapStateToProps = (state) => {
+
+    const addObject = {
+        imageURL: state.add.imageURL,
+        accented: state.add.accented,
+        pronounciationURL: state.add.pronounciationURL,
+        exampleSentence: state.add.exampleSentence,
+        extraInfo: state.add.extraInfo
+    }
+    return {addObject};
+};
+
+export default connect(mapStateToProps,mapDispatchToProps)(ExampleSentence);

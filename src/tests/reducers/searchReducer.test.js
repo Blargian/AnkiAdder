@@ -26,5 +26,6 @@ describe('Search reducer', () => {
     it('Should return an object with the properties of the search term', () => {
         expect(searchReducer(undefined, searchTermAction(submitObject)
         )).toEqual(submitObject)
-    })
+    });
+    
 })
