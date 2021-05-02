@@ -22,9 +22,11 @@ Added an image grid and image selection functionality. An API call is made to Pi
 
 Refactored the search bar redux code to pass more information for the search to the store (added audio, accented, type and id), added a dbHelper and endpoint for fetching the translation. Added pronounciation play support (for words where the pronounciation link exists).
 
-01/05/2021
+01/05/2021 - 02/05/2021
 
 Incorporated material-io, setup the form for examples sentences and extra information and wrote code so that when the user clicks the add button the data in the redux store gets formatted as JSON which can then be passed to the backend. Backend runs a python script which downloads the image, audio and adds the card to Anki itself. 
+
+Got JSON from the frontend passing to the backend. Tried adding cards programatically using the python anki library however it seems to work incorrectly and just adds to the default deck. I'll try going the harder route now - will need to do that anyway if I want to make the program more generic later on. (Ability to read what decks and card types are already in anki and populate the forms accordingly).
 
 ## Setup notes (Database)
 
