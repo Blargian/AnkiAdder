@@ -37,3 +37,11 @@ mysql2sqlite -f openrussian.db -d openrussian -u yourusername -p yourpassword
 
 Place the .db file at /database
 
+## Interfacing with Anki 
+
+Julien Sobczak provides an excellent guide on how to automate adding cards to Anki over at https://www.juliensobczak.com/write/2016/12/26/anki-scripting.html
+Or
+https://www.juliensobczak.com/write/2020/12/26/anki-scripting-for-non-programmers.html
+
+The frontend data is passed to nodeJS as JSON which is then fed into a python script via stdin with the script running as a child process in node. The python script makes use of Anki desktops internal API to add the cards as an alternative to using the desktop GUI to add the cards.
+

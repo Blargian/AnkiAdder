@@ -6,6 +6,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { connect,useSelector } from 'react-redux';
 import Utility from '../utilities/utility';
 import {addExampleSentenceAction,addExtraInfoAction} from '../actions/addActions';
+import axios from 'axios';
 
 const utility = new Utility();
 const useStyles = makeStyles((theme) => ({
@@ -34,7 +35,17 @@ const ExampleSentence = ({addObject,addExampleSentence,addExtraInfo}) => {
         if(add){
             setAdd(false);
             console.log(addObject);
-            utility.reduxToJSON(addObject);
+            const res = axios.post('/add',
+            utility.reduxToJSON(addObject),{
+                headers: {
+                    'Content-Type':'application/json'
+                }
+            }
+            );
+
+            if(res.status===200){
+                console.log('Sent the data successfully');
+            }
         }
     },[addObject])
 
