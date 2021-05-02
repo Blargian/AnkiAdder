@@ -31,7 +31,7 @@ app.get('/api/translate/:id',(req,res)=>{
   })
 })
 
-app.get('/add',interfaceAnki);
+app.post('/add',interfaceAnki);
 //Function which passes the JSON to anki itself through python
 function interfaceAnki(req,res) {
 

@@ -31,8 +31,9 @@ Incorporated material-io, setup the form for examples sentences and extra inform
 In order to run this project on your local machine you'll need to download the latest MySql dump of the openrussian.org database from https://en.openrussian.org/dictionary. Once you've downloaded that you'll need to convert the database dump to an sqlite3 .db file. I did that using this handy converter shell script: https://github.com/dumblob/mysql2sqlite 
 
 To convert the sql dump to sqlite you can run:
-`mysql2sqlite -f openrussian.db -d openrussian -u yourusername -p yourpassword
-`
+```
+mysql2sqlite -f openrussian.db -d openrussian -u yourusername -p yourpassword
+```
 
 Place the .db file at /database
 
