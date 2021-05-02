@@ -40,7 +40,7 @@ function interfaceAnki(req,res) {
   //console.log(req.body);
   var spawn = require("child_process").spawn;
 
-  var py = spawn('python',["-u",path.join(__dirname, "anki_service.py")]);
+  var py = spawn(path.join(__dirname, "../scripts/env/Scripts/python"),["-u",path.join(__dirname, "../scripts/anki_service.py")]);
 
   py.stdout.on('data', function(data) {
     console.log(data.toString());
