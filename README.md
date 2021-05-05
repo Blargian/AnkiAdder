@@ -26,6 +26,10 @@ Refactored the search bar redux code to pass more information for the search to 
 
 Incorporated material-io, setup the form for examples sentences and extra information and wrote code so that when the user clicks the add button the data in the redux store gets formatted as JSON which can then be passed to the backend. Backend runs a python script which downloads the image, audio and adds the card to Anki itself. 
 
+05/05/2021
+
+After a little bit of confusion for the last two days I've been able to add the cards to the deck that I choose. The Anki API has obviously changed a little bit since the article was written so I needed to look into the code and figure out how to use the functions correctly. The Anki API is pretty powerful and actually it shouldn't be too hard to use it to make a more generic program which is pretty exciting. I could display a list of the decks on the frontend, a list of card types. This program could be extended to allow other uses to add vocabulary easily. 
+
 ## Setup notes (Database)
 
 In order to run this project on your local machine you'll need to download the latest MySql dump of the openrussian.org database from https://en.openrussian.org/dictionary. Once you've downloaded that you'll need to convert the database dump to an sqlite3 .db file. I did that using this handy converter shell script: https://github.com/dumblob/mysql2sqlite 
