@@ -26,6 +26,9 @@ Refactored the search bar redux code to pass more information for the search to 
 
 Incorporated material-io, setup the form for examples sentences and extra information and wrote code so that when the user clicks the add button the data in the redux store gets formatted as JSON which can then be passed to the backend. Backend runs a python script which downloads the image, audio and adds the card to Anki itself. 
 
+05/05/2021
+
+After a little bit of confusion for the last two days I've been able to add the cards to the deck that I choose. The Anki API has obviously changed a little bit since the article was written so I needed to look into the code and figure out how to use the functions correctly. The Anki API is pretty powerful and actually it shouldn't be too hard to use it to make a more generic program which is pretty exciting. I could display a list of the decks on the frontend, a list of card types. This program could be extended to allow other uses to add vocabulary easily. 
 Got JSON from the frontend passing to the backend. Tried adding cards programatically using the python anki library however it seems to work incorrectly and just adds to the default deck. I'll try going the harder route now - will need to do that anyway if I want to make the program more generic later on. (Ability to read what decks and card types are already in anki and populate the forms accordingly).
 
 ## Setup notes (Database)
@@ -38,4 +41,12 @@ mysql2sqlite -f openrussian.db -d openrussian -u yourusername -p yourpassword
 ```
 
 Place the .db file at /database
+
+## Interfacing with Anki 
+
+Julien Sobczak provides an excellent guide on how to automate adding cards to Anki over at https://www.juliensobczak.com/write/2016/12/26/anki-scripting.html
+Or
+https://www.juliensobczak.com/write/2020/12/26/anki-scripting-for-non-programmers.html
+
+The frontend data is passed to nodeJS as JSON which is then fed into a python script via stdin with the script running as a child process in node. The python script makes use of Anki desktops internal API to add the cards as an alternative to using the desktop GUI to add the cards.
 
