@@ -31,6 +31,10 @@ Incorporated material-io, setup the form for examples sentences and extra inform
 After a little bit of confusion for the last two days I've been able to add the cards to the deck that I choose. The Anki API has obviously changed a little bit since the article was written so I needed to look into the code and figure out how to use the functions correctly. The Anki API is pretty powerful and actually it shouldn't be too hard to use it to make a more generic program which is pretty exciting. I could display a list of the decks on the frontend, a list of card types. This program could be extended to allow other uses to add vocabulary easily. 
 Got JSON from the frontend passing to the backend. Tried adding cards programatically using the python anki library however it seems to work incorrectly and just adds to the default deck. I'll try going the harder route now - will need to do that anyway if I want to make the program more generic later on. (Ability to read what decks and card types are already in anki and populate the forms accordingly).
 
+08/05/2021
+
+Worked on adding a picture card to Anki. Having issues with cyrilic words and the python backend throwing the error "isn't a valid unicode string and can't be encoded in UTF-8".
+
 ## Setup notes (Database)
 
 In order to run this project on your local machine you'll need to download the latest MySql dump of the openrussian.org database from https://en.openrussian.org/dictionary. Once you've downloaded that you'll need to convert the database dump to an sqlite3 .db file. I did that using this handy converter shell script: https://github.com/dumblob/mysql2sqlite 

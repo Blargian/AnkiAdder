@@ -37,7 +37,6 @@ app.post('/add',interfaceAnki);
 //Function which passes the JSON to anki itself through python
 function interfaceAnki(req,res) {
 
-  //console.log(req.body);
   var spawn = require("child_process").spawn;
 
   var py = spawn(path.join(__dirname, "../scripts/env/Scripts/python"),["-u",path.join(__dirname, "../scripts/anki_service.py")]);

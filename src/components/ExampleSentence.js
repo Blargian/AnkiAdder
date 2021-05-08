@@ -38,7 +38,7 @@ const ExampleSentence = ({addObject,addExampleSentence,addExtraInfo}) => {
             const res = axios.post('/add',
             utility.reduxToJSON(addObject),{
                 headers: {
-                    'Content-Type':'application/json'
+                    'Content-Type':'application/json',
                 }
             }
             );
