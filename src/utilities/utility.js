@@ -15,8 +15,11 @@ class Utility {
         let unicoded = string.replace(/[\u007F-\uFFFF]/g,(char)=>{
             return "\\u" + ("0000" + char.charCodeAt(0).toString(16)).substr(-4)
         });
-        console.log(unicoded)
-        return unicoded;
+        let apostrophe_replaced = unicoded.replace(/[']/g,(apostrophe)=>{
+            return "\\u0027";
+        })
+        console.log(apostrophe_replaced)
+        return apostrophe_replaced;
     }
 }
 

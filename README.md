@@ -34,6 +34,7 @@ Got JSON from the frontend passing to the backend. Tried adding cards programati
 08/05/2021
 
 Worked on adding a picture card to Anki. Having issues with cyrilic words and the python backend throwing the error "isn't a valid unicode string and can't be encoded in UTF-8".
+Managed to fix that by writing to a json file rather. Added functions for downloading the image and audio.  
 
 ## Setup notes (Database)
 

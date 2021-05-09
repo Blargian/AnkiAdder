@@ -4,7 +4,7 @@
   "description": "An application to automate adding cards to Anki",
   "main": "public/electron.js",
   "scripts": {
-    "start": "nodemon server/server.js webpack --mode development -- --watch",
+    "start": "nodemon server/server.js --ext js",
     "build:dev": "webpack --mode development",
     "dev-server": "webpack serve --mode development",
     "test": "jest"
@@ -61,6 +61,7 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "sqlite": "^4.0.19",
-    "sqlite3": "^5.0.2"
+    "sqlite3": "^5.0.2",
+    "utf8": "^3.0.0"
   }
 }

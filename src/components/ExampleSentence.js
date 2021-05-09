@@ -41,13 +41,10 @@ const ExampleSentence = ({addObject,addExampleSentence,addExtraInfo}) => {
                     'Content-Type':'application/json',
                 }
             }
+            ).then(
+                //window.location.href='http://localhost:3000/'
             );
-
-            if(res.status===200){
-                console.log('Sent the data successfully');
-            }
-        }
-    },[addObject])
+        }},[addObject])
 
     return (
         <div className="example-sentence">
