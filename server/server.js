@@ -54,12 +54,11 @@ function interfaceAnki(req,res) {
     });
   }
 
-  downloadAudio(req.body.pronounciationURL,req.body.accented);
-  downloadImage(req.body.imageURL,req.body.accented);
   fs.writeFile(path.join(__dirname, "../scripts/datasource.json"), JSON.stringify(req.body),{encoding: 'utf8'},launchPython);  
   res.json({ msg: 'success' });  
 }
 
+//Deprecated - to be done from python
 const downloadAudio = (url,word) => {
   const file = fs.createWriteStream(path.join(__dirname, "../scripts/downloads/")+`${word}.mp3`);
   const request = https.get(`${url}`, function(response) {
@@ -67,7 +66,7 @@ const downloadAudio = (url,word) => {
   });
 }
 
-
+//Deprecated - to be done from python
 const downloadImage = (url,word) => {
   const file = fs.createWriteStream(path.join(__dirname, "../scripts/downloads/")+`${word}.jpg`);
   const request = https.get(`${url}`, function(response) {
