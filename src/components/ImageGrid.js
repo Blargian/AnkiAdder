@@ -2,22 +2,28 @@ import React, {useState, useEffect} from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import {addImageAction} from '../actions/addActions';
+import Spinner from './Spinner';
 
 const ImageGrid = ({word,addImageAction}) => {
 
     //state for storing the image url and selection state
     const [images, setImages] = useState([{}])
+    const [showSpinner,setSpinner] = useState(false);
+    const [imagesLoaded, setNumberLoaded] = useState(0);
 
     //on component mount fetch the images
     useEffect(async ()=>{
+        setSpinner(true);
         const results = await axios(
             `https://pixabay.com/api/?key=${process.env.PIXA_API_KEY}&q=${word}&per_page=9`
         );
         const gridImages = [];
         results.data.hits.forEach((image)=>{
-            gridImages.push({selected: false, url: image.webformatURL})
+            gridImages.push({selected: false, url: image.webformatURL});
         });
-        setImages(gridImages)
+        setSpinner(false);
+        setImages(gridImages);
+        images
     },[])
 
     //called when an image is clicked
@@ -33,21 +39,24 @@ const ImageGrid = ({word,addImageAction}) => {
     }
 
     return (
-        <div className="image-grid">
-            {images.map((image,index)=>{
-                return <div 
-                    className={`image-grid__image--selected-${image.selected}`} 
-                    key={index} 
-                    onClick={()=>selectedImageHandler(index,image.url)}
-                    style={{
-                        content: '',
-                        backgroundImage: `url(${image.url})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        height: '15rem'
-                    }} 
-                    alt=""/>
-            })}
+        <div>
+            <div className="image-grid">
+            <Spinner loading={showSpinner}/>
+                {images.map((image,index)=>{
+                    return <div 
+                        className={`image-grid__image--selected-${image.selected}`} 
+                        key={index} 
+                        onClick={()=>selectedImageHandler(index,image.url)}
+                        style={{
+                            content: '',
+                            backgroundImage: `url(${image.url})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            height: '15rem'
+                        }} 
+                        alt=""/>
+                })}
+            </div>
         </div>
     )
 }

@@ -42,7 +42,7 @@ const ExampleSentence = ({addObject,addExampleSentence,addExtraInfo}) => {
                 }
             }
             ).then(
-                //window.location.href='http://localhost:3000/'
+                window.location.href='http://localhost:3000/'
             );
         }},[addObject])
 
