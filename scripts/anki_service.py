@@ -29,11 +29,13 @@ def download_file(type,url,word):
             extension = '.mp3'
         elif(type=='image'):
             extension='.jpg'
-        r = requests.get(url)
+        r = requests.get(url) 
         path = os.path.dirname(os.path.abspath(__file__))+'\downloads'
-        with open('{path}\{word}{ext}'.format(path=path,word=word,ext=extension),"wb") as file:
+        localFile = '{path}\{word}{ext}'.format(path=path,word=word,ext=extension)
+        with open(localFile,"wb") as file:
             file.write(r.content)
-        copyTo = shutil.copy('sample1.txt', '/home/varun/test')
+        copyTo = shutil.copy(localFile, mediaDirectory)
+        os.remove(localFile)
     except Exception as e:
         print("An error occured downloading {type}".format(type=type))
         print(e)    
@@ -58,9 +60,9 @@ def main():
         note = col.newNote(deck['id'])
 
         note.fields[0] = data["accented"] #Word
-        note.fields[1] = "Picture"  #Picture 
+        note.fields[1] = "<img src=" + data["accented"]+".jpg" +"/>"  #Picture 
         note.fields[2] = data["extraInfo"] #ExtraInfo 
-        note.fields[3] = "Audio"  #Pronounciation 
+        note.fields[3] = "[sound:"+data["accented"]+".mp3"+"]"  #Pronounciation 
         note.fields[4] = data["exampleSentence"] #ExampleSentence
     except Exception as e:
         print("An error occured trying to add data to note")

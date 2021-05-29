@@ -36,6 +36,10 @@ Got JSON from the frontend passing to the backend. Tried adding cards programati
 Worked on adding a picture card to Anki. Having issues with cyrilic words and the python backend throwing the error "isn't a valid unicode string and can't be encoded in UTF-8".
 Managed to fix that by writing to a json file rather. Added functions for downloading the image and audio.  
 
+29/05/2021
+
+Added functionality to copy across the image and audio to the media directory. 
+
 ## Setup notes (Database)
 
 In order to run this project on your local machine you'll need to download the latest MySql dump of the openrussian.org database from https://en.openrussian.org/dictionary. Once you've downloaded that you'll need to convert the database dump to an sqlite3 .db file. I did that using this handy converter shell script: https://github.com/dumblob/mysql2sqlite 
