@@ -3,3 +3,5 @@
 /russian-dictionary
 /database/openrussian.db
 .env
+/scripts/datasource.json
+/scripts/downloads/*

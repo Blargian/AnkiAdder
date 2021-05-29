@@ -38,16 +38,13 @@ const ExampleSentence = ({addObject,addExampleSentence,addExtraInfo}) => {
             const res = axios.post('/add',
             utility.reduxToJSON(addObject),{
                 headers: {
-                    'Content-Type':'application/json'
+                    'Content-Type':'application/json',
                 }
             }
+            ).then(
+                //window.location.href='http://localhost:3000/'
             );
-
-            if(res.status===200){
-                console.log('Sent the data successfully');
-            }
-        }
-    },[addObject])
+        }},[addObject])
 
     return (
         <div className="example-sentence">
