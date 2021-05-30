@@ -38,7 +38,7 @@ Managed to fix that by writing to a json file rather. Added functions for downlo
 
 29/05/2021
 
-Added functionality to copy across the image and audio to the media directory. 
+Added functionality to copy across the image and audio to the media directory. Added spinner to the image grid on load (will need to refactor the image grid), added spinner on Add Card button. 
 
 ## Setup notes (Database)
 
