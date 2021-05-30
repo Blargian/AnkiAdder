@@ -2,18 +2,19 @@ import React, {useState, useEffect} from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import {addImageAction} from '../actions/addActions';
-import Spinner from './Spinner';
+import { makeStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const ImageGrid = ({word,addImageAction}) => {
 
     //state for storing the image url and selection state
     const [images, setImages] = useState([{}])
-    const [showSpinner,setSpinner] = useState(false);
+    const [spinnerClass,setSpinner] = useState("componentSpinner-hidden");
     const [imagesLoaded, setNumberLoaded] = useState(0);
 
     //on component mount fetch the images
     useEffect(async ()=>{
-        setSpinner(true);
+        setSpinner("componentSpinner");
         const results = await axios(
             `https://pixabay.com/api/?key=${process.env.PIXA_API_KEY}&q=${word}&per_page=9`
         );
@@ -21,7 +22,7 @@ const ImageGrid = ({word,addImageAction}) => {
         results.data.hits.forEach((image)=>{
             gridImages.push({selected: false, url: image.webformatURL});
         });
-        setSpinner(false);
+        setSpinner("componentSpinner-hidden");
         setImages(gridImages);
         images
     },[])
@@ -40,8 +41,8 @@ const ImageGrid = ({word,addImageAction}) => {
 
     return (
         <div>
-            <div className="image-grid">
-            <Spinner loading={showSpinner}/>
+            <CircularProgress color="secondary" size={80} className={spinnerClass}/>
+            <div className={`${imagesLoaded === 9 ? 'image-grid' : 'image-grid'}`}>
                 {images.map((image,index)=>{
                     return <div 
                         className={`image-grid__image--selected-${image.selected}`} 
@@ -54,6 +55,9 @@ const ImageGrid = ({word,addImageAction}) => {
                             backgroundPosition: 'center',
                             height: '15rem'
                         }} 
+                        onLoad={()=>{
+                            setNumberLoaded(imagesLoaded++)
+                            }}
                         alt=""/>
                 })}
             </div>
