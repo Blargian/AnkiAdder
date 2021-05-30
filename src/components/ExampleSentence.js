@@ -1,8 +1,11 @@
 import React, {useState, useEffect} from 'react';
+import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { connect,useSelector } from 'react-redux';
 import Utility from '../utilities/utility';
 import {addExampleSentenceAction,addExtraInfoAction} from '../actions/addActions';
@@ -15,13 +18,19 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
       },
     },
+    backdrop: {
+        zIndex: theme.zIndex.drawer + 1,
+        color: '#fff',
+      },
   }));
 
 const ExampleSentence = ({addObject,addExampleSentence,addExtraInfo}) => {
 
+    let history = useHistory();
     const [exampleSentence, setExample] = useState('');
     const [extraInfo, setExtra] = useState('');
     const [add,setAdd] = useState(false);
+    const [open, setOpen] = React.useState(false);
     const classes = useStyles();
 
     const submitHandler = (event) => {
@@ -41,10 +50,14 @@ const ExampleSentence = ({addObject,addExampleSentence,addExtraInfo}) => {
                     'Content-Type':'application/json',
                 }
             }
-            ).then(
-                window.location.href='http://localhost:3000/'
-            );
+            ).then(()=>{
+                setTimeout(()=>{history.push("/");},1000)
+            });
         }},[addObject])
+
+        const handleToggle = () => {
+            setOpen(!open);
+          };
 
     return (
         <div className="example-sentence">
@@ -70,9 +83,13 @@ const ExampleSentence = ({addObject,addExampleSentence,addExtraInfo}) => {
                     size="large"
                     className={classes.button}
                     startIcon={<AddIcon />}
+                    onClick={handleToggle}
                 >
                     Add Card
-                </Button> 
+                </Button>
+                <Backdrop className={classes.backdrop} open={open}>
+                    <CircularProgress color="inherit" />
+                </Backdrop> 
             </form>
         </div>
         
