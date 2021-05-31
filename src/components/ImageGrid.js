@@ -22,10 +22,14 @@ const ImageGrid = ({word,addImageAction}) => {
         results.data.hits.forEach((image)=>{
             gridImages.push({selected: false, url: image.webformatURL});
         });
-        setSpinner("componentSpinner-hidden");
         setImages(gridImages);
-        images
     },[])
+
+    useEffect(()=>{
+        if(imagesLoaded===9){
+            setSpinner("componentSpinner-hidden");
+        }
+    },[imagesLoaded]);
 
     //called when an image is clicked
     const selectedImageHandler = (selectedIndex,imageURL) => {
@@ -40,11 +44,13 @@ const ImageGrid = ({word,addImageAction}) => {
     }
 
     return (
-        <div>
-            <CircularProgress color="secondary" size={80} className={spinnerClass}/>
-            <div className={`${imagesLoaded === 9 ? 'image-grid' : 'image-grid'}`}>
+        <div className="image-grid-container">
+            <div className="spinner-wrapper">
+                <CircularProgress color="secondary" size={80} className={spinnerClass}/>
+            </div>
+            <div className={`${imagesLoaded === 9 ? 'image-grid' : 'image-grid-hidden'}`}>
                 {images.map((image,index)=>{
-                    return <div 
+                    return <img 
                         className={`image-grid__image--selected-${image.selected}`} 
                         key={index} 
                         onClick={()=>selectedImageHandler(index,image.url)}
@@ -54,11 +60,12 @@ const ImageGrid = ({word,addImageAction}) => {
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
                             height: '15rem'
-                        }} 
+                        }}
+                        src={image.url}
                         onLoad={()=>{
-                            setNumberLoaded(imagesLoaded++)
+                            setNumberLoaded(imagesLoaded+1)
                             }}
-                        alt=""/>
+                        alt=""></img>
                 })}
             </div>
         </div>

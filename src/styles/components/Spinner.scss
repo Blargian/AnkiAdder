@@ -42,8 +42,10 @@
   }
 
   .componentSpinner{
-    z-index: 2;
-    position: absolute;
-    top: 50%;
-    left:50%;
+    margin-left: 50%;
+    left: -40px;
+  }
+
+  .spinner-wrapper{
+    display: relative;
   }
