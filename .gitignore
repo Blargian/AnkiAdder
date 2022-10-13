@@ -5,3 +5,8 @@
 .env
 /scripts/datasource.json
 /scripts/downloads/*
+/python_app/testfile.xlsx
+/python_app/config.json
+/data 
+/python_app/env
+/python_app/media/*
