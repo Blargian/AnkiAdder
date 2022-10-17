@@ -6,6 +6,11 @@ import aiohttp
 import asyncio
 import aiofiles
 import pymongo
+# for tkinter # 
+from tkinter import *
+from tkinter import ttk 
+from tkinter import filedialog
+#------------#
 # for anki #
 import sys, json
 from anki.storage import Collection
@@ -19,25 +24,18 @@ anki_home = r'C:/AnkiTmp/User 1/'
 mediaDirectory=anki_home + 'collection.media'
 anki_collection_path = os.path.join(anki_home, "collection.anki2")
 
-def main(args):
+# reads an excel file and retrieves the words in the file 
+def readFile(fileName):
+    wordList = pd.read_excel(fileName)
+    words = wordList["Words"]
+    return words.values 
 
-    #Script
-    parser = argparse.ArgumentParser(description='Adds a list of words to Anki')
-    parser.add_argument('-i',dest='input',help='the name of .xlsx file to run the script on. The file should be in the same directory. ')
-    args = parser.parse_args()
-    words = readFile(args.input)
+def processFile(fileName):
+    words = readFile(fileName)
     db = establishDBConnection()
     clearWordData(db)
     storeWordData(db,getWordData(db,words))
-    downloadPronounciation(words,db)
-    for word in words:
-        addToAnki(db,word)
-    
-# reads an excel file and retrieves the words in the file 
-def readFile(fileName):
-    wordList = pd.read_excel("testfile.xlsx")
-    words = wordList["Words"]
-    return words.values 
+    #downloadPronounciation(words,db)
 
 def getConfig():
     configFile = open('config.json')
@@ -45,7 +43,6 @@ def getConfig():
     return config
 
 def downloadPronounciation(words,db):
-    print(words)
     config = getConfig()
     requestString = config["forvo"]["requestString"]
     apiKey = config["forvo"]["apiKey"]
@@ -80,7 +77,7 @@ async def makeRequests(requestUrls,db,word):
                     await mp3Urls.append(null)
                     await updateTempStorage(db,word,{ "importedWord": word[index] },False)
 
-async def updateTempStorage(db,wordToUpdate,query,value):
+def updateTempStorage(db,wordToUpdate,query,value):
     tempCollection = db["temp"]
     newvalues = { "$set": { "downloadedPronounciation": value }}
     tempCollection.update_one(query, newvalues)
@@ -107,8 +104,8 @@ def findWord(db,word):
         'pronounciationFound': False,
         'pronounciationURL':'',
         'imageURL':'',
-        'exampleSentence':''
-        'extraInfo'
+        'exampleSentence':'',
+        'extraInfo':''
     }
 
     inWordCollection = db["words"]
@@ -137,20 +134,20 @@ def findWord(db,word):
                 else: 
                     formattedWordData["verb"][getOppositeAspect(resultVerb["aspect"])] = resultVerb["partner"] 
                     formattedWordData["error_multipleAspectPartners"] = True
-    
+    print(formattedWordData)
     return formattedWordData
 
-async def getWordData(db, wordsToSearch):
+def getWordData(db, wordsToSearch):
     formattedWordData = []
     for word in wordsToSearch:
         formattedWordData.append(findWord(db,word))
     return formattedWordData
 
-async def storeWordData(db,wordsToStore):
+def storeWordData(db,wordsToStore):
     tempCollection = db["temp"]
     tempCollection.insert_many(wordsToStore)
 
-async def clearWordData(db):
+def clearWordData(db):
     tempCollection = db["temp"]
     tempCollection.delete_many({})
 
@@ -224,5 +221,45 @@ def copy_file(type,word):
         print(e)    
         exit()
 
+def main(args):
+    #downloadPronounciation(words,db)
+    #for word in words:
+        #addToAnki(db,word)
+
+    root = Tk()
+    root.title("Add to Anki")
+    mainframe = ttk.Frame(root, padding="2 2 2 2")
+    mainframe.grid(column=0,row=0,sticky=(N,W,E,S))
+    mainframe.columnconfigure(0,weight=1)
+    mainframe.rowconfigure(0,weight=1)
+
+    #global variables#
+    selectedFile = StringVar(root,'')
+
+    def selectFile():
+        filetypes = (
+            ('xlsx files','*.xlsx'),
+        )
+
+        file = (filedialog.askopenfile(
+            title = 'Open a file',
+            initialdir='/',
+            filetypes=filetypes)
+        )
+        selectedFile.set(file.name)
+
+    #module definitions 
+    ttk.Label(mainframe, text="Select .xlsx file").grid(column=1,row=1,sticky=E)
+    ttk.Button(mainframe, text="open file", command=selectFile).grid(column=2,row=1,sticky=E)
+    ttk.Label(mainframe,text="Selected file: ").grid(column=1,row=2,sticky=E)
+    ttk.Label(mainframe,textvariable=selectedFile).grid(column=2,row=2,sticky=E)
+
+    ttk.Button(mainframe,text='process data',command=lambda:processFile(selectedFile.get())).grid(column=1,row=3,sticky=E)
+    root.mainloop()
+
 if __name__ == '__main__':
-    main(sys.argv)
+
+    try:
+        main(sys.argv)
+    finally:
+        print('Program exited')
