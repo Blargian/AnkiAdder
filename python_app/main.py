@@ -13,25 +13,34 @@ import os
 import requests
 import shutil
 #---------#
+import tkinter as tk
 
 #Change this to be your media directory
 anki_home = r'C:/AnkiTmp/User 1/'
 mediaDirectory=anki_home + 'collection.media'
 anki_collection_path = os.path.join(anki_home, "collection.anki2")
 
-def main(args):
+class App(tk.Tk):
+    def __init__(self):
+        super().__init__()
 
-    #Script
-    parser = argparse.ArgumentParser(description='Adds a list of words to Anki')
-    parser.add_argument('-i',dest='input',help='the name of .xlsx file to run the script on. The file should be in the same directory. ')
-    args = parser.parse_args()
-    words = readFile(args.input)
-    db = establishDBConnection()
-    clearWordData(db)
-    storeWordData(db,getWordData(db,words))
-    downloadPronounciation(words,db)
-    for word in words:
-        addToAnki(db,word)
+        #Script
+        self.title("Anki Adder")
+        self.geometry("720x550")
+        self.resizable(True,True)
+
+        container = tk.Frame(self)
+        container.pack(side="top", fill="both",expand="true")
+        container.grid_rowconfigure(0,weight=1)
+        container.grid_columnconfigure(0,weight=1)
+
+    # words = readFile(args.input)
+    # db = establishDBConnection()
+    # clearWordData(db)
+    # storeWordData(db,getWordData(db,words))
+    # downloadPronounciation(words,db)
+    # for word in words:
+    #     addToAnki(db,word)
     
 # reads an excel file and retrieves the words in the file 
 def readFile(fileName):
@@ -225,4 +234,5 @@ def copy_file(type,word):
         exit()
 
 if __name__ == '__main__':
-    main(sys.argv)
+    app = App()
+    app.mainloop()
