@@ -14,6 +14,7 @@ import requests
 import shutil
 #---------#
 import tkinter as tk
+from tkinter import filedialog as fd
 
 #Change this to be your media directory
 anki_home = r'C:/AnkiTmp/User 1/'
@@ -28,19 +29,69 @@ class App(tk.Tk):
         self.title("Anki Adder")
         self.geometry("720x550")
         self.resizable(True,True)
+        self.words = []
+        self.databaseData = []
 
         container = tk.Frame(self)
         container.pack(side="top", fill="both",expand="true")
         container.grid_rowconfigure(0,weight=1)
         container.grid_columnconfigure(0,weight=1)
 
-    # words = readFile(args.input)
-    # db = establishDBConnection()
-    # clearWordData(db)
-    # storeWordData(db,getWordData(db,words))
-    # downloadPronounciation(words,db)
-    # for word in words:
-    #     addToAnki(db,word)
+        #global variables#
+        self.selectedFile = tk.StringVar(container,'')
+        
+        def selectFile(self):
+            filetypes = (
+                ('xlsx files','*.xlsx'),
+            )
+
+            file = (fd.askopenfile(
+                title = 'Open a file',
+                initialdir='./',
+                filetypes=filetypes)
+            )
+            self.selectedFile.set(file.name)
+
+        # modules 
+        padding = {'padx':'10','pady':'10'}
+        open_button = tk.Button(
+            container,
+            text='Open a File',
+            command=lambda:selectFile(self)
+        ).grid(column=0,row=0,sticky='W',**padding)
+
+        process_button = tk.Button(
+            container,
+            text='Process',
+            command=lambda:self.process_file(container)
+        ).grid(column=0,row=1,sticky='W',**padding)
+
+    def process_file(self,container):
+        self.words = readFile(self.selectedFile)
+        db = establishDBConnection()
+        clearWordData(db)
+        wordData = asyncio.run(getWordData(db,self.words))
+        
+        print(wordData)
+        keysList = list(wordData[0].keys())
+
+        table = tk.Frame(container)
+
+        for i in range (len(keysList)):
+            header = tk.Label(table,text="{}".format(keysList[i]),width=10,fg='black',font=('Arial',10,'bold'))
+            header.grid(row=0,column=i)
+
+        for i,word in enumerate(wordData):
+            for j,key in enumerate(keysList):
+                e = tk.Entry(table,width=13,fg='black',font=('Arial',10,'bold'))
+                e.grid(row=i+1,column=j)
+                e.insert(tk.END,wordData[i]["{}".format(keysList[j])])
+        
+        table.grid(column=0,row=3)
+
+        #downloadPronounciation(self.wordData,db)
+        # for word in words:
+        #     addToAnki(db,word)
     
 # reads an excel file and retrieves the words in the file 
 def readFile(fileName):
@@ -116,8 +167,8 @@ def findWord(db,word):
         'pronounciationFound': False,
         'pronounciationURL':'',
         'imageURL':'',
-        'exampleSentence':''
-        'extraInfo'
+        'exampleSentence':'',
+        'extraInfo': ''
     }
 
     inWordCollection = db["words"]
