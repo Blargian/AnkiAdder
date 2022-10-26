@@ -14,7 +14,9 @@ import requests
 import shutil
 #---------#
 import tkinter as tk
+from tkinter import ttk
 from tkinter import filedialog as fd
+from tkintertable import TableCanvas, TableModel
 
 #Change this to be your media directory
 anki_home = r'C:/AnkiTmp/User 1/'
@@ -34,8 +36,6 @@ class App(tk.Tk):
 
         container = tk.Frame(self)
         container.pack(side="top", fill="both",expand="true")
-        container.grid_rowconfigure(0,weight=1)
-        container.grid_columnconfigure(0,weight=1)
 
         #global variables#
         self.selectedFile = tk.StringVar(container,'')
@@ -58,41 +58,55 @@ class App(tk.Tk):
             container,
             text='Open a File',
             command=lambda:selectFile(self)
-        ).grid(column=0,row=0,sticky='W',**padding)
+        ).pack()
 
         process_button = tk.Button(
             container,
             text='Process',
             command=lambda:self.process_file(container)
-        ).grid(column=0,row=1,sticky='W',**padding)
+        ).pack()
 
     def process_file(self,container):
         self.words = readFile(self.selectedFile)
         db = establishDBConnection()
-        clearWordData(db)
-        wordData = asyncio.run(getWordData(db,self.words))
-        
-        print(wordData)
-        keysList = list(wordData[0].keys())
+        asyncio.run(clearWordData(db))
+        asyncio.run(storeWordData(db,asyncio.run(getWordData(db,self.words)))) 
+        downloadPronounciation(self.words,db)
+        tableData = asyncio.run(getDataForDisplay(db,self.words))
 
-        table = tk.Frame(container)
+        #returned data seperated into data & 'informer' data as table won't work with Bool 
+        tableDataDic = {}
+        tableInformersDic = {} 
+        tableDataDic,tableInformersDic = extractDataFromInformer(tableData,["error_multipleAspectPartners","pronounciationFound"])
 
-        for i in range (len(keysList)):
-            header = tk.Label(table,text="{}".format(keysList[i]),width=10,fg='black',font=('Arial',10,'bold'))
-            header.grid(row=0,column=i)
+        tframe = tk.Frame(container)
+        tframe.pack(fill='both')
+        table=TableCanvas(tframe,data=tableDataDic)
 
-        for i,word in enumerate(wordData):
-            for j,key in enumerate(keysList):
-                e = tk.Entry(table,width=13,fg='black',font=('Arial',10,'bold'))
-                e.grid(row=i+1,column=j)
-                e.insert(tk.END,wordData[i]["{}".format(keysList[j])])
-        
-        table.grid(column=0,row=3)
+        for index,record in enumerate(tableInformersDic):
+            if(tableInformersDic[record]["pronounciationFound"]==True):
+                table.setcellColor(rows=[index],cols=[1],newColor='green',key='bg',redraw=False)
+            else:
+                table.setcellColor(rows=[index],cols=[1],newColor='red',key='bg',redraw=False)
 
-        #downloadPronounciation(self.wordData,db)
-        # for word in words:
-        #     addToAnki(db,word)
-    
+        table.show()
+
+#seperates out boolean data from a dictionary. Used because the table library won't process Bools directly
+def extractDataFromInformer(dataToSeperate,informers):
+
+    tableDataDic = {}
+    tableInformersDic = {}
+
+    for index,table in enumerate(dataToSeperate):
+        withoutBooleans = {}
+        for informer in informers:
+            withoutBooleans["{}".format(informer)] = table.pop(informer)
+            
+        tableInformersDic["rec{}".format(index)] = withoutBooleans
+        tableDataDic["rec{}".format(index)] = table
+
+    return tableDataDic,tableInformersDic 
+
 # reads an excel file and retrieves the words in the file 
 def readFile(fileName):
     wordList = pd.read_excel("testfile.xlsx")
@@ -142,7 +156,7 @@ async def makeRequests(requestUrls,db,word):
 
 async def updateTempStorage(db,wordToUpdate,query,value):
     tempCollection = db["temp"]
-    newvalues = { "$set": { "downloadedPronounciation": value }}
+    newvalues = { "$set": { "pronounciationFound": value }}
     tempCollection.update_one(query, newvalues)
 
 def establishDBConnection():
@@ -213,6 +227,34 @@ async def storeWordData(db,wordsToStore):
 async def clearWordData(db):
     tempCollection = db["temp"]
     tempCollection.delete_many({})
+
+async def getDataForDisplay(db,wordsToSearch):
+    formattedWordData = []
+    tempCollection = db["temp"]
+
+    for word in wordsToSearch:
+        result = tempCollection.aggregate([{'$unwind':'$verb'},{'$match':{'importedWord':word}},{'$group':{
+        '_id':0,
+        'importedWord':{'$first':"$importedWord"},
+        'accented':{'$first':"$accented"},
+        'translation':{'$first':"$translation"},
+        'imperfective':{'$first':"$verb.imperfective"},
+        'perfective':{'$first':"$verb.perfective"},
+        'error_multipleAspectPartners':{'$first':"$error_multipleAspectPartners"},
+        'pronounciationFound':{'$first':"$pronounciationFound"},
+        'imageURL':{'$first':"$imageURL"},
+        'exampleSentence':{'$first':"$exampleSentence"},
+        'extraInfo':{'$first':"$extraInfo"}
+        }
+        }]) 
+        formattedWordData.append(list(result)[0])
+
+    #get rid of _id which was needed for the grouping above 
+    for each in formattedWordData:
+        each.pop('_id',None)
+
+    return formattedWordData
+
 
 #returns only the first aspect partner if a verb has multiple associated aspect partners  
 def checkForSinglePartner(aspectPartner):
