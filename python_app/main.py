@@ -6,6 +6,7 @@ import aiohttp
 import asyncio
 import aiofiles
 import pymongo
+import re
 # for anki #
 import sys, json
 from anki.storage import Collection
@@ -17,6 +18,8 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog as fd
 from tkintertable import TableCanvas, TableModel
+import spacy
+from spacy.tokens import Token
 
 #Change this to be your media directory
 anki_home = r'C:/AnkiTmp/User 1/'
@@ -26,7 +29,6 @@ anki_collection_path = os.path.join(anki_home, "collection.anki2")
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
-
         #Script
         self.title("Anki Adder")
         self.geometry("720x550")
@@ -70,9 +72,16 @@ class App(tk.Tk):
         self.words = readFile(self.selectedFile)
         db = establishDBConnection()
         asyncio.run(clearWordData(db))
-        asyncio.run(storeWordData(db,asyncio.run(getWordData(db,self.words)))) 
-        downloadPronounciation(self.words,db)
-        tableData = asyncio.run(getDataForDisplay(db,self.words))
+        cleanedWords = cleanWords(self.words)
+        nlp = spacy.load("ru_core_news_lg")
+
+        lemmatizedWords = []
+        for word in cleanedWords:
+            lemmatizedWords.append(lemmatize(word,nlp))
+
+        asyncio.run(storeWordData(db,asyncio.run(getWordData(db,lemmatizedWords)))) 
+        #downloadPronounciation(self.words,db)
+        tableData = asyncio.run(getDataForDisplay(db,lemmatizedWords))
 
         #returned data seperated into data & 'informer' data as table won't work with Bool 
         tableDataDic = {}
@@ -86,10 +95,28 @@ class App(tk.Tk):
         for index,record in enumerate(tableInformersDic):
             if(tableInformersDic[record]["pronounciationFound"]==True):
                 table.setcellColor(rows=[index],cols=[1],newColor='green',key='bg',redraw=False)
-            else:
+            elif(tableInformersDic[record]["pronounciationFound"]==False):
                 table.setcellColor(rows=[index],cols=[1],newColor='red',key='bg',redraw=False)
+            elif(tableInformersDic[record]["error_multipleAspectPartners"]==True):
+                table.setcellColor(rows=[index],cols=[3],newColor='yellow',key='bg',redraw=False)
 
         table.show()
+
+        add_button = tk.Button(
+            container,
+            text='Add to Anki',
+            command=lambda:addTableToAnki(db,self.words,table)
+        ).pack()
+
+def addTableToAnki(db,words,table):
+
+    columnNames = []
+    for i in range(table.model.getColumnCount()):
+        columnNames.append(table.model.getColumnName(i))
+    
+    data = table.model.getAllCells()
+    # for word in words:
+    #     addToAnki(db,word)
 
 #seperates out boolean data from a dictionary. Used because the table library won't process Bools directly
 def extractDataFromInformer(dataToSeperate,informers):
@@ -109,7 +136,7 @@ def extractDataFromInformer(dataToSeperate,informers):
 
 # reads an excel file and retrieves the words in the file 
 def readFile(fileName):
-    wordList = pd.read_excel("testfile.xlsx")
+    wordList = pd.read_excel(fileName.get())
     words = wordList["Words"]
     return words.values 
 
@@ -119,7 +146,6 @@ def getConfig():
     return config
 
 def downloadPronounciation(words,db):
-    print(words)
     config = getConfig()
     requestString = config["forvo"]["requestString"]
     apiKey = config["forvo"]["apiKey"]
@@ -204,13 +230,24 @@ def findWord(db,word):
                 formattedWordData["verb"]['{}'.format(resultVerb["aspect"])] = result["accented"]
 
                 #handles the case where partner aspects are more than one 
-                if(checkForSinglePartner(resultVerb["partner"])):
-                    partnerResult = inWordCollection.find_one({'bare':'{}'.format(resultVerb["partner"])})
-                    if(partnerResult):
-                        formattedWordData["verb"][getOppositeAspect(resultVerb["aspect"])] = partnerResult["accented"] 
-                else: 
-                    formattedWordData["verb"][getOppositeAspect(resultVerb["aspect"])] = resultVerb["partner"] 
-                    formattedWordData["error_multipleAspectPartners"] = True
+                if("partner" in resultVerb):
+                    if(checkForSinglePartner(resultVerb["partner"])):
+                        partnerResult = inWordCollection.find_one({'bare':'{}'.format(resultVerb["partner"])})
+                        if(partnerResult):
+                            formattedWordData["verb"][getOppositeAspect(resultVerb["aspect"])] = partnerResult["accented"] 
+                    else: 
+                        formattedWordData["verb"][getOppositeAspect(resultVerb["aspect"])] = resultVerb["partner"] 
+                        formattedWordData["error_multipleAspectPartners"] = True
+
+        id = result["id"]
+        #do another search for word_id and lang="en" in table Translations
+        inTranslationsCollection = db["Translations"]
+        translationResult = inTranslationsCollection.find_one({
+            'word_id':'{}'.format(id),
+            'lang':'en'
+            })
+        if(translationResult):
+            formattedWordData["translation"] = translationResult["tl"]
     
     return formattedWordData
 
@@ -219,6 +256,17 @@ async def getWordData(db, wordsToSearch):
     for word in wordsToSearch:
         formattedWordData.append(findWord(db,word))
     return formattedWordData
+
+def cleanWords(wordsToSearch):
+    cleanedWords = []
+    for word in wordsToSearch:
+        cleanedWord = re.sub('[".",","," ","!","?"]$','',word)
+        #get rid of sentences by looking for multiple spaces
+        if(re.search(re.compile('\s+'),word)==None):
+            cleanedWords.append(cleanedWord)
+        else:
+            ()
+    return cleanedWords
 
 async def storeWordData(db,wordsToStore):
     tempCollection = db["temp"]
@@ -247,7 +295,12 @@ async def getDataForDisplay(db,wordsToSearch):
         'extraInfo':{'$first':"$extraInfo"}
         }
         }]) 
-        formattedWordData.append(list(result)[0])
+
+        listResult = list(result)
+        if listResult:
+            formattedWordData.append(listResult[0])
+        if not listResult:
+            print('skipped {}'.format(word))
 
     #get rid of _id which was needed for the grouping above 
     for each in formattedWordData:
@@ -288,7 +341,6 @@ def addToAnki(db,word):
         #pull the data from the temporary table in db
         tempCollection = db["temp"]
         data = tempCollection.find_one({'importedWord':'{}'.format(word)})
-        print(data)
 
         #add the data to each field of the note 
         note.fields[0] = data["accented"] #Word
@@ -325,6 +377,18 @@ def copy_file(type,word):
         print("An error occured copying {}").format(type)
         print(e)    
         exit()
+
+def lemmatize(word,nlp):
+    try:
+        doc = nlp(word)
+        empty_list = []
+        for token in doc:
+            empty_list.append(token.lemma_)
+        processed = empty_list[0]
+    except Exception as e:
+        print("An error occured lemmatizing {}").format(word)
+        print(e)    
+    return processed 
 
 if __name__ == '__main__':
     app = App()

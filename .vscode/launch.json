@@ -1,0 +1,20 @@
+{
+  "name": "Python: Attach",
+  "type": "python",
+  "request": "attach",
+
+  "connect": {
+    "host": "localhost",
+    "port": 5678
+  },
+  "configurations": [
+    {
+      "name": "Python: Current File",
+      "type": "python",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+    }
+  ],
+}
