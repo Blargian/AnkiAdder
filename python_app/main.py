@@ -52,7 +52,7 @@ class App(tk.Tk):
                 initialdir='./',
                 filetypes=filetypes)
             )
-            self.selectedFile.set(file.name)
+            self.selectedFile.set(file.name)    
 
         # modules 
         padding = {'padx':'10','pady':'10'}
