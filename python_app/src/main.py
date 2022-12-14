@@ -90,6 +90,8 @@ class App(tk.Tk):
 
         tframe = tk.Frame(container)
         tframe.pack(fill='both')
+        import pdb
+        pdb.set_trace()
         table=TableCanvas(tframe,data=tableDataDic)
 
         for index,record in enumerate(tableInformersDic):

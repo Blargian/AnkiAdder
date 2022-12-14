@@ -10,3 +10,4 @@
 /data 
 /python_app/env
 /python_app/media/*
+/python_app/*.xlsx
