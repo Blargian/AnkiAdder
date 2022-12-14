@@ -8,8 +8,8 @@ class App(tk.Tk):
         super().__init__()
         self.title("Anki Adder")
         self.geometry("1920x1080")
-        self.layout = Layout(self,self.wordHandler)
-        self.wordHandler = WordHandler(self.layout)
+        self.layout = Layout(self)
+        self.wordHandler = WordHandler()
         setUp(self)
         
 
