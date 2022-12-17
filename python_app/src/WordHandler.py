@@ -18,9 +18,9 @@ class WordHandler:
 
         for preprocessed_word in lemmatizedWords:
             processed_word = findWord(self.db,preprocessed_word)
-            processed_word.setId(asyncio.run(storeWordData(self.db,processed_word)))
-            self.setWord(processed_word)
-        pass
+            if(processed_word):
+                processed_word.setId(asyncio.run(storeWordData(self.db,processed_word)))
+                self.setWord(processed_word)
 
     def getDb(self):
         return self.db
@@ -103,9 +103,8 @@ def findWord(db,word):
                     partnerResult = inWordCollection.find_one({'bare':'{}'.format(resultVerb["partner"])})
                     if(partnerResult):
                         formattedWordData.setVerb(getOppositeAspect(resultVerb["aspect"]),partnerResult["accented"]) 
-                else: 
-                    formattedWordData.setVerb(getOppositeAspect(resultVerb["aspect"]),partnerResult["accented"]) 
-                    formattedWordData.setErrorMultipleAspects(True)
+                    else: 
+                        formattedWordData.setErrorMultipleAspects(True)
 
     id = result["id"]
     #do another search for word_id and lang="en" in table Translations

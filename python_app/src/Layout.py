@@ -8,7 +8,7 @@ from tkinter import filedialog as fd
 # This class defines all GUI elements and interfaces to them
 
 class Layout:
-    def __init__(self,appWindow):
+    def __init__(self,appWindow,wordHandler):
         self.file_reader = FileReader()
         self.inner_frame = Frame(appWindow,padx=10,pady=10)
         self.inner_frame.grid(row=0,column=0)
