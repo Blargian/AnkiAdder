@@ -1,6 +1,11 @@
-# AnkiAdder
+# Anki Adder <img src="https://user-images.githubusercontent.com/41984034/224571424-b108213e-80a7-47d9-be85-0882eb3e3c9f.png" width=50 height=50>
+
+
+
 
 A desktop application to automate the process of adding flashcards to Anki for learning the Russian language. The application makes use of the Forvo API and the incredibly generous sharing of data over at www.openrussian.com. Using Anki to memorise vocabulary is one of the most effective ways to learn new words however the time it takes to add the cards can quickly stack up and become impractical, especially when you need to add hundreds of new words. This app simplifies the process by allowing you to import a list of words you want to add from a .csv file. The program will automatically pull pronounciations and images for you and add the cards directly to the anki database programatically, whilst showing you any potential issues you will need to manually fix. In this way most of the work is done and only minimal time is spent on fixing words which are more obscure.  
+
+[![Technologies](https://skillicons.dev/icons?i=py,mongodb)](https://skillicons.dev)
 
 ## Setup notes (Database)
 
